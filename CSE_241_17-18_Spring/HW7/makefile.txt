@@ -1,0 +1,5 @@
+all:
+	javac *.java
+	java Homework.java
+clean:
+	rm *.class

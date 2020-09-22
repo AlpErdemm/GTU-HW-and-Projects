@@ -1,0 +1,27 @@
+Server.c:
+
+Data.dat dosyasından aldığım bilgileri bir struct'a atadım.
+Gerekli sayıda thread oluşturup bunları server_function adlı fonksiyon ile çalıştırdım.
+Bunun ardından 5555 portunda çalışacak soketi oluşturup bind->listen->accept yaptım.(Server sonsuza kadar çalışacağı için accept'i döngüye aldım.)
+Choose fonksiyonu hangi thread'in uyandırılması gerektiğini seçer ve gerekli işlemler yapılır.
+
+Freer_thread:
+
+Threadleri uyandırır ama biri dışında diğerleri beklemeye döner.
+
+Server_function:
+
+Fonksiyon kendi thread numarasını parametre olarak alıyor.
+Sleep fonksiyonu sıkıntı çıkardığı için nanosleep kullandım.
+lock->cwait->işlem->unlock yaptım.
+
+Choose:
+
+Client'in isteğine göre gerekli provider'ı seçer
+
+Client.c:
+
+Server ile aynı soket ayarlarını yapar ve sabit bir mesaj verir sokete.
+Benim örneğimde bu mesaj "Hile C 45".
+
+	

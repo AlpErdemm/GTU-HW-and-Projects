@@ -1,0 +1,124 @@
+import java.util.*;
+
+public class GTUSet<T extends Comparable<? super T>> extends GTUContainer<T> implements Iterable<T> {
+
+    public GTUSet(int capacity) {
+        arr = (T[]) new Comparable[capacity];
+    }
+
+    public GTUSet() {
+        arr = getInitialArray();
+    }
+
+    private T[] getInitialArray() {
+        return (T[]) new Comparable[INIT_CAPACITY];
+    }
+
+    public boolean contains(Object t1) {
+        // TODO: Null check
+        for (int i = 0; i < size; i++) {
+            if (t1.equals(arr[i]))
+                return true;
+        }
+        return false;
+    }
+
+    public void insert(T element) {
+        if (!contains(element)) {
+            // Capacity is full. Double the capacity.
+            if (size == arr.length) {
+                doubleCap();
+            }
+            arr[size++] = element;
+            sortSet(arr);
+        }
+    }
+
+    public void sortSet(T[] arr) {
+        if (arr != null) {
+            for (int i = 1; i < size; i++)
+            {
+                int current = i;
+                while (current > 0 && arr[current - 1].compareTo(arr[current]) > 0)
+                {
+                    T temp = arr[current];
+                    arr[current] = arr[current - 1];
+                    arr[current - 1] = temp;
+                    current--;
+                }
+            }
+        }
+    }
+
+    void clear() {
+        arr = getInitialArray();
+        size = 0;
+    }
+
+    void erase(T element) {
+        int ind = 0;
+        for (int i = 0; i < size; i++) {
+            if (arr[i].equals(element)) {
+                ind = i;
+                break;
+            }
+        }
+
+        // shift elements
+        for (int i = ind + 1; i < size; i++) {
+            arr[i-1] = arr[i];
+        }
+
+        // free the last element
+        size--;
+        arr[size] = null;
+    }
+
+    private void doubleCap(){
+        T[] oldArray = arr;
+        arr = (T[]) new Comparable[arr.length*2];
+        System.arraycopy(oldArray, 0, arr, 0, size);
+    }
+
+    int size() {
+        if (arr != null) {
+            return size;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    int max_size() {
+        if (arr != null) {
+            return arr.length;
+        }
+        else {
+            return 0;
+        }
+    }
+
+    boolean empty() {
+        return size == 0;
+    }
+
+    class GTUIterator implements Iterator<T> {
+        int position = 0;
+
+        public boolean hasNext() {
+            return position != size;
+        }
+
+        public T next() {
+            if (!hasNext()) {
+                throw new NoSuchElementException();
+            }
+            return arr[position++];
+        }
+    }
+
+    public Iterator<T> iterator() {
+        return new GTUIterator();
+    }
+
+}
